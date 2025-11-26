@@ -1,0 +1,199 @@
+{
+  "name": "Sistema Casilleros Inteligentes",
+  "version": "2.0.0",
+  "description": "Sistema de donaciones con casilleros inteligentes ESP32",
+  "author": "Universidad Tecnológica",
+  "license": "MIT",
+  "keywords": ["ESP32", "IoT", "Casilleros", "Donaciones", "Universidad"],
+  
+  "hardware": {
+    "board": "esp32",
+    "cpu": "esp32",
+    "port": "COM3",
+    "upload_speed": "921600",
+    "monitor_speed": "115200"
+  },
+  
+  "dependencies": {
+    "WiFi": "Built-in",
+    "BluetoothSerial": "Built-in", 
+    "ArduinoJson": "^7.0.0",
+    "LiquidCrystal I2C": "^1.1.2",
+    "Keypad": "^3.1.1",
+    "ESP32Servo": "^1.1.1",
+    "HTTPClient": "Built-in",
+    "Preferences": "Built-in"
+  },
+  
+  "configuration": {
+    "wifi_ssid": "TU_WIFI_SSID",
+    "wifi_password": "TU_WIFI_PASSWORD",
+    "api_url": "http://localhost:4000/api/hardware",
+    "locker_id": "CASILLERO_A1",
+    "location": "Universidad Tecnológica"
+  },
+  
+  "pinout": {
+    "lcd_sda": 21,
+    "lcd_scl": 22,
+    "keypad_rows": [19, 18, 5, 17],
+    "keypad_cols": [16, 4, 0, 2],
+    "servo_pin": 13,
+    "led_success": 12,
+    "led_error": 14,
+    "buzzer_pin": 27
+  },
+  
+  "features": [
+    "Verificación de códigos de acceso temporales",
+    "Comunicación WiFi con backend Firebase",
+    "Control Bluetooth para configuración remota", 
+    "Pantalla LCD con interfaz de usuario",
+    "Teclado matricial 4x4 para entrada",
+    "Servo/solenoide para control de bloqueo",
+    "LEDs de estado y buzzer de audio",
+    "Logging de eventos y accesos",
+    "Timeout automático de seguridad",
+    "Cierre automático programado",
+    "Modo de emergencia",
+    "Health checks periódicos"
+  ],
+  
+  "api_endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/hardware/verify-code",
+      "description": "Verificar código de acceso del casillero",
+      "body": {
+        "access_code": "string",
+        "locker_id": "string", 
+        "location": "string",
+        "timestamp": "number"
+      }
+    },
+    {
+      "method": "GET", 
+      "path": "/api/hardware/status/:lockerId",
+      "description": "Obtener estado del casillero"
+    },
+    {
+      "method": "POST",
+      "path": "/api/hardware/event", 
+      "description": "Registrar evento del casillero",
+      "body": {
+        "locker_id": "string",
+        "event_type": "string",
+        "details": "string",
+        "timestamp": "number"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/hardware/setup",
+      "description": "Configuración inicial del casillero",
+      "body": {
+        "locker_id": "string",
+        "name": "string",
+        "location": "string",
+        "ip_address": "string",
+        "mac_address": "string",
+        "firmware_version": "string"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/hardware/health",
+      "description": "Health check del sistema"
+    }
+  ],
+  
+  "installation_steps": [
+    "1. Instalar Arduino IDE 2.x",
+    "2. Agregar soporte para ESP32 en Board Manager",
+    "3. Instalar librerías requeridas desde Library Manager",
+    "4. Conectar hardware según el pinout especificado",
+    "5. Configurar variables WiFi y API en el código",
+    "6. Compilar y subir código al ESP32",
+    "7. Abrir Serial Monitor para verificar funcionamiento",
+    "8. Probar conectividad con el backend",
+    "9. Registrar casillero en el sistema con /api/hardware/setup",
+    "10. Realizar pruebas completas de funcionamiento"
+  ],
+  
+  "testing_checklist": [
+    "✅ Conexión WiFi exitosa",
+    "✅ Comunicación con backend",
+    "✅ Pantalla LCD funcional", 
+    "✅ Teclado matricial responsivo",
+    "✅ Servo/solenoide operativo",
+    "✅ LEDs de estado funcionando",
+    "✅ Buzzer emitiendo sonidos",
+    "✅ Bluetooth conectándose",
+    "✅ Códigos de acceso validándose",
+    "✅ Timeout automático activándose",
+    "✅ Cierre automático funcionando",
+    "✅ Logs de eventos guardándose",
+    "✅ Health checks respondiendo",
+    "✅ Modo emergencia accesible",
+    "✅ Integración completa con app"
+  ],
+  
+  "troubleshooting": {
+    "no_wifi": {
+      "symptoms": "LED rojo parpadeando, no conecta WiFi",
+      "solutions": [
+        "Verificar SSID y password",
+        "Revisar alcance de señal WiFi",
+        "Resetear configuración de red",
+        "Verificar firewall del router"
+      ]
+    },
+    "no_backend": {
+      "symptoms": "WiFi OK pero no verifica códigos",
+      "solutions": [
+        "Verificar URL del servidor",
+        "Confirmar que backend está ejecutándose",
+        "Revisar configuración CORS",
+        "Verificar endpoints en server.js"
+      ]
+    },
+    "lcd_blank": {
+      "symptoms": "Pantalla LCD en blanco",
+      "solutions": [
+        "Verificar conexiones SDA/SCL",
+        "Revisar dirección I2C (0x27)",
+        "Verificar alimentación LCD",
+        "Probar con scanner I2C"
+      ]
+    },
+    "keypad_unresponsive": {
+      "symptoms": "Teclado no responde",
+      "solutions": [
+        "Verificar conexiones de filas y columnas",
+        "Revisar configuración de pines",
+        "Probar teclado con multímetro",
+        "Verificar librerías Keypad"
+      ]
+    }
+  },
+  
+  "maintenance": {
+    "daily": [
+      "Verificar conectividad remota",
+      "Revisar logs de eventos", 
+      "Confirmar health checks"
+    ],
+    "weekly": [
+      "Limpiar pantalla LCD",
+      "Verificar funcionamiento del servo",
+      "Revistar estadísticas de uso",
+      "Actualizar firmware si necesario"
+    ],
+    "monthly": [
+      "Backup completo de configuración",
+      "Revisión física de conexiones",
+      "Test completo de funcionalidades",
+      "Actualización de certificados WiFi"
+    ]
+  }
+}
